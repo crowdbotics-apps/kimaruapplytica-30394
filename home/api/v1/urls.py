@@ -6,7 +6,7 @@ from home.api.v1.viewsets import (
     LoginViewSet,
     AppViewSet,
     PlanViewSet,
-    SubscriptionViewSet
+    SubscriptionViewSet,
 )
 
 router = DefaultRouter()

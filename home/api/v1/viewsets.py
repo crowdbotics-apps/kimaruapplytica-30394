@@ -8,9 +8,10 @@ from home.api.v1.serializers import (
     UserSerializer,
     AppSerializer,
     PlanSerializer,
-    SubscriptionSerializer
+    SubscriptionSerializer,
 )
 from home.models import App, Plan, Subscription
+
 
 class SignupViewSet(ModelViewSet):
     serializer_class = SignupSerializer
@@ -36,19 +37,18 @@ class LoginViewSet(ViewSet):
 class AppViewSet(ModelViewSet):
     serializer_class = AppSerializer
     queryset = App.objects.all()
-    lookup_field = 'id'
-    
-    
+    lookup_field = "id"
+
+
 class PlanViewSet(ModelViewSet):
     serializer_class = PlanSerializer
     queryset = Plan.objects.all()
-    lookup_field = 'id'
-    http_method_names = ['get', 'head']
-    
-    
+    lookup_field = "id"
+    http_method_names = ["get", "head"]
+
+
 class SubscriptionViewSet(ModelViewSet):
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()
-    lookup_field = 'id'
-    http_method_names = ['get', 'post', 'head','put','patch']
-    
+    lookup_field = "id"
+    http_method_names = ["get", "post", "head", "put", "patch"]
