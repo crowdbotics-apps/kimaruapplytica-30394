@@ -6,8 +6,11 @@ from rest_framework.response import Response
 from home.api.v1.serializers import (
     SignupSerializer,
     UserSerializer,
+    AppSerializer,
+    PlanSerializer,
+    SubscriptionSerializer
 )
-
+from home.models import App, Plan, Subscription
 
 class SignupViewSet(ModelViewSet):
     serializer_class = SignupSerializer
@@ -28,3 +31,24 @@ class LoginViewSet(ViewSet):
         token, created = Token.objects.get_or_create(user=user)
         user_serializer = UserSerializer(user)
         return Response({"token": token.key, "user": user_serializer.data})
+
+
+class AppViewSet(ModelViewSet):
+    serializer_class = AppSerializer
+    queryset = App.objects.all()
+    lookup_field = 'id'
+    
+    
+class PlanViewSet(ModelViewSet):
+    serializer_class = PlanSerializer
+    queryset = Plan.objects.all()
+    lookup_field = 'id'
+    http_method_names = ['get', 'head']
+    
+    
+class SubscriptionViewSet(ModelViewSet):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+    lookup_field = 'id'
+    http_method_names = ['get', 'post', 'head','put','patch']
+    
