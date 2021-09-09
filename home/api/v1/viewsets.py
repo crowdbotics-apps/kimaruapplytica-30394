@@ -33,12 +33,16 @@ class LoginViewSet(ViewSet):
         user_serializer = UserSerializer(user)
         return Response({"token": token.key, "user": user_serializer.data})
 
-
+# all views require basic auth
 class AppViewSet(ModelViewSet):
     serializer_class = AppSerializer
-    queryset = App.objects.all()
     lookup_field = "id"
     authentication_classes = [IsAuthenticated]
+    # ensure a user only sees apps registered under their user account
+    def get_queryset(self):
+        user = self.request.user
+        return App.objects.filter(user=user.id)
+    
 
 
 class PlanViewSet(ModelViewSet):
