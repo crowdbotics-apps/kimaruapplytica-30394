@@ -2,7 +2,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
 from home.api.v1.serializers import (
     SignupSerializer,
     UserSerializer,
@@ -38,6 +38,7 @@ class AppViewSet(ModelViewSet):
     serializer_class = AppSerializer
     queryset = App.objects.all()
     lookup_field = "id"
+    authentication_classes = [IsAuthenticated]
 
 
 class PlanViewSet(ModelViewSet):
@@ -45,6 +46,7 @@ class PlanViewSet(ModelViewSet):
     queryset = Plan.objects.all()
     lookup_field = "id"
     http_method_names = ["get", "head"]
+    authentication_classes = [IsAuthenticated]
 
 
 class SubscriptionViewSet(ModelViewSet):
@@ -52,3 +54,4 @@ class SubscriptionViewSet(ModelViewSet):
     queryset = Subscription.objects.all()
     lookup_field = "id"
     http_method_names = ["get", "post", "head", "put", "patch"]
+    authentication_classes = [IsAuthenticated]
