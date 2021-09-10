@@ -33,7 +33,7 @@ class BaseModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
-    deleted_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True, editable=False)
     active = models.BooleanField(default=True)
 
     class Meta:

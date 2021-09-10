@@ -37,7 +37,7 @@ class LoginViewSet(ViewSet):
 class AppViewSet(ModelViewSet):
     serializer_class = AppSerializer
     lookup_field = "id"
-    authentication_classes = [IsAuthenticated]
+    premission_classes = [IsAuthenticated]
     # ensure a user only sees apps registered under their user account
     def get_queryset(self):
         user = self.request.user
@@ -50,7 +50,7 @@ class PlanViewSet(ModelViewSet):
     queryset = Plan.objects.all()
     lookup_field = "id"
     http_method_names = ["get", "head"]
-    authentication_classes = [IsAuthenticated]
+    premission_classes = [IsAuthenticated]
 
 
 class SubscriptionViewSet(ModelViewSet):
@@ -58,4 +58,4 @@ class SubscriptionViewSet(ModelViewSet):
     queryset = Subscription.objects.all()
     lookup_field = "id"
     http_method_names = ["get", "post", "head", "put", "patch"]
-    authentication_classes = [IsAuthenticated]
+    premission_classes = [IsAuthenticated]

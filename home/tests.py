@@ -19,6 +19,7 @@ class AppTest(TestCase):
             "type": "Web",
             "framework": "Django",
             "subscription": 1,
+            "user":1
         }
         self.factory = RequestFactory()
         self.user = User.objects.create_superuser(
@@ -27,7 +28,7 @@ class AppTest(TestCase):
         self.app = App.objects.create(**sample_data)
 
     def test_get(self):
-        request = self.factory.get(reverse("home:apps"))
+        request = self.factory.get(reverse("home:apps-list"))
         force_authenticate(request, user=self.user)
         response = AppViewSet.as_view({"get": "list"})(request)
         # Check if name is as expected
@@ -37,20 +38,20 @@ class AppTest(TestCase):
 
     def test_create(self):
         data = json.dumps(
-            {"name": "Amazon", "type": "Web", "framework": "Django", "subscription": 1}
+            {"name": "Amazon", "type": "Web", "framework": "Django", "subscription": 1, "user": 1}
         )
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.post(
-            reverse("home:apps"), data=data, content_type="application/json"
+            reverse("home:apps-list"), data=data, content_type="application/json"
         )
         # Check for succesful post
-        self.assertEqual(response.status_code, HTTPStatus.OK._value_)
+        self.assertEqual(response.status_code, HTTPStatus.CREATED._value_)
 
     def test_url(self):
         # check for succesful URL resolving
-        assert reverse("home:apps") == "/apps/"
-        assert resolve("/apps/").view_name == "home:apps"
+        assert reverse("home:apps-list") == "/api/v1/apps/"
+        assert resolve("/api/v1/apps/").view_name == "home:apps-list"
 
 
 class PlanTest(TestCase):
@@ -63,17 +64,23 @@ class PlanTest(TestCase):
         self.plan = Plan.objects.create(**sample_data)
 
     def test_create(self):
-        data = json.dumps({"name": "standard", "description": "standard", "price": 20})
+        data = json.dumps(
+             {
+    "name": "free",
+    "price": "0.00",
+    "description":"free",
+  }
+        )
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.post(
-            reverse("home:plans"), data=data, content_type="application/json"
+            reverse("home:plans-list"), data=data, content_type="application/json"
         )
-        # Check for succesful post
-        self.assertEqual(response.status_code, HTTPStatus.OK._value_)
+        # Check for 405 since plans are not to be added via API
+        self.assertEqual(response.status_code, HTTPStatus.METHOD_NOT_ALLOWED._value_)
 
     def test_get(self):
-        request = self.factory.get(reverse("home:plans"))
+        request = self.factory.get(reverse("home:plans-list"))
         force_authenticate(request, user=self.user)
         response = PlanViewSet.as_view({"get": "list"})(request)
         # Check if name is as expected
@@ -83,8 +90,8 @@ class PlanTest(TestCase):
 
     def test_url(self):
         # check for succesful URL resolving
-        assert reverse("home:plans") == "/plans/"
-        assert resolve("/plans/").view_name == "home:plans"
+        assert reverse("home:plans-list") == "/api/v1/plans/"
+        assert resolve("/api/v1/plans/").view_name == "home:plans-list"
 
 
 class SubscriptionTest(TestCase):
@@ -97,11 +104,11 @@ class SubscriptionTest(TestCase):
         self.subscription = Subscription.objects.create(**sample_data)
 
     def test_get(self):
-        request = self.factory.get(reverse("home:subscriptions"))
+        request = self.factory.get(reverse("home:subscriptions-list"))
         force_authenticate(request, user=self.user)
         response = SubscriptionViewSet.as_view({"get": "list"})(request)
         # Check if app is as expected
-        self.assertEqual(response.data[0]["app"], "1")
+        self.assertEqual(response.data[0]["app"], 1)
         # check for succesful response
         self.assertEqual(response.status_code, HTTPStatus.OK._value_)
 
@@ -110,12 +117,12 @@ class SubscriptionTest(TestCase):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.post(
-            reverse("home:subscriptions"), data=data, content_type="application/json"
+            reverse("home:subscriptions-list"), data=data, content_type="application/json"
         )
         # Check for succesful post
-        self.assertEqual(response.status_code, HTTPStatus.OK._value_)
+        self.assertEqual(response.status_code, HTTPStatus.CREATED._value_)
 
     def test_url(self):
         # check for succesful URL resolving
-        assert reverse("home:subscriptions") == "/subscriptions/"
-        assert resolve("/subscriptions/").view_name == "home:subscriptions"
+        assert reverse("home:subscriptions-list") == "/api/v1/subscriptions/"
+        assert resolve("/api/v1/subscriptions/").view_name == "home:subscriptions-list"

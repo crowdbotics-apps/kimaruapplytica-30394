@@ -12,7 +12,7 @@ type_choices = [("Web", "web"), ("Mobile", "Mobile")]
 class Plan(BaseModel):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255, null=True, blank=True)
-    price = models.DecimalField()
+    price = models.DecimalField(decimal_places=2,max_digits=6)
 
     def __str__(self) -> str:
         return self.name
@@ -27,7 +27,7 @@ class App(BaseModel):
     )
     domain_name = models.CharField(max_length=50, blank=True, null=True)
     screenshot = models.URLField(null=True, blank=True)
-    subscription = models.IntegerField()
+    subscription = models.IntegerField(null=True, blank=True)
     user = models.IntegerField()
 
     def __str__(self) -> str:
@@ -40,4 +40,4 @@ class Subscription(BaseModel):
     app = models.IntegerField()
 
     def __str__(self) -> str:
-        return self.name
+        return f"Subscription to user {self.user}"

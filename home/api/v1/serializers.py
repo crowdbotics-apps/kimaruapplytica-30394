@@ -91,32 +91,22 @@ class AppSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "created_at",
             "updated_at",
-            "screenshot",
-            "subscription",
-            "user",
+            "id"
         )
 
-    def to_representation(self, instance):
-        self.fields["user"] = UserSerializer(read_only=True)
-        self.fields["subscription"] = SubscriptionSerializer(read_only=True)
-        return super(AppSerializer, self).to_representation(instance)
-
-
-class SubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subscription
-        fields = ["id", "user", "plan", "app", "created_at", "updated_at"]
-        read_only_fields = ("created_at", "updated_at")
-
-    def to_representation(self, instance):
-        self.fields["user"] = UserSerializer(read_only=True)
-        self.fields["plan"] = PlanSerializer(read_only=True)
-        self.fields["app"] = AppSerializer(read_only=True)
-        return super(SubscriptionSerializer, self).to_representation(instance)
-
-
+    
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
-        fields = ["id", "name", "price", "description", "created_at", "updated_at"]
-        read_only_fields = ("created_at", "updated_at")
+        fields = ["id", "name","price", "description", "created_at", "updated_at"]
+        read_only_fields = ("created_at", "updated_at", "id")
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Subscription
+        fields = ["id", "user", "plan", "app", "created_at", "updated_at"]
+        read_only_fields = ("created_at", "updated_at", "id")
+
+    
