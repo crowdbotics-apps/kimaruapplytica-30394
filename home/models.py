@@ -28,7 +28,7 @@ class App(BaseModel):
     domain_name = models.CharField(max_length=50, blank=True, null=True)
     screenshot = models.URLField(null=True, blank=True)
     subscription = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.PROTECT())
+    user = models.IntegerField()
 
     def __str__(self) -> str:
         return self.name
